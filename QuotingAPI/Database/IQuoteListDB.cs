@@ -6,8 +6,8 @@ using QuotingAPI.Database.Models;
 
 namespace QuotingAPI.Database
 {
-    interface IQuoteListDB
+    public interface IQuoteListDB
     {
-        public List<Quote> GetAll();
+        public List<QuoteProducts> GetAll();
     }
 }

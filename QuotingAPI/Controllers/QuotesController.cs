@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuotingAPI.DTOModels;
+using QuotingAPI.BusinessLogic;
 
 namespace QuotingAPI.Controllers
 {
-    [Route("api/[controller]")]
+//    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/quoting")]
+
     public class QuotesController : ControllerBase
     {
         private readonly IQuotesLogic _quotesLogic;
@@ -24,7 +27,7 @@ namespace QuotingAPI.Controllers
         {
             return _quotesLogic.GetQuoteList();
         }
-
+/*
         // GET: api/Quotes/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
@@ -49,5 +52,6 @@ namespace QuotingAPI.Controllers
         public void Delete(int id)
         {
         }
+        */
     }
 }

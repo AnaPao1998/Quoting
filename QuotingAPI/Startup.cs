@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using QuotingAPI.BusinessLogic;
+using QuotingAPI.Database;
 
 namespace QuotingAPI
 {
@@ -26,6 +28,9 @@ namespace QuotingAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IQuotesLogic, QuotesLogic>();
+            services.AddTransient<IQuoteListDB, QuoteListDB>();
+      
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +41,7 @@ namespace QuotingAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

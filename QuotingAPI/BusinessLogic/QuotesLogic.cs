@@ -13,15 +13,12 @@ namespace QuotingAPI.BusinessLogic
     {
         private readonly IQuoteListDB _quoteListDB;
 
-
         public QuotesLogic(IQuoteListDB quoteListDB)
         {
             _quoteListDB = quoteListDB;
         }
         public List<QuoteDTO> GetQuoteList()
-
         {
-
             List<QuoteProducts> allQuotes = _quoteListDB.GetAll();
 
             List<QuoteDTO> listToAssign = GetEmptyList();
@@ -54,6 +51,7 @@ namespace QuotingAPI.BusinessLogic
             quote.IsSell = new Random().Next(2) == 1;
             float productInitialPrice = new Random().Next(150, 600); // Val Aleatorio inicial
             float quantityDiscount = 0;
+            float rankingDiscount = 1 * (float)0.01; //Hardcoded ranking
 
             if (quote.Quantity >= 12)
             {
@@ -62,7 +60,7 @@ namespace QuotingAPI.BusinessLogic
                 else
                     quantityDiscount = (float)0.05;
             }
-            quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount));
+            quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount - rankingDiscount)); //Applying Discounts to Final Price
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }

@@ -52,17 +52,17 @@ namespace QuotingAPI.BusinessLogic
         {
             QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
             quote.IsSell = new Random().Next(2) == 1;
-            float productInitialPrice = 10; 
+            float productInitialPrice = new Random().Next(150, 600); // Val Aleatorio inicial
+            float quantityDiscount = 0;
 
-            if (quote.Quantity < 12)
-                quote.Price = productInitialPrice * quote.Quantity;
-            else
+            if (quote.Quantity >= 12)
             {
-                if (quote.Quantity < 24)
-                    quote.Price = (float)(productInitialPrice * quote.Quantity * 0.05);
+                if (quote.Quantity >= 24)
+                    quantityDiscount = (float)0.10;
                 else
-                    quote.Price = (float)(productInitialPrice * quote.Quantity * 0.10);
+                    quantityDiscount = (float)0.05;
             }
+            quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount));
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }

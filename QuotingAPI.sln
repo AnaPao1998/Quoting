@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotingAPI", "QuotingAPI\QuotingAPI.csproj", "{20F26B5A-7056-45E9-AA9A-366AF839FF03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuotingAPI", "QuotingAPI\QuotingAPI.csproj", "{20F26B5A-7056-45E9-AA9A-366AF839FF03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{98CD016C-D853-4FA8-BD05-1E815EE6F547}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{74C2A169-3820-48AC-9CEF-B9AF3E2C30FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{20F26B5A-7056-45E9-AA9A-366AF839FF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20F26B5A-7056-45E9-AA9A-366AF839FF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20F26B5A-7056-45E9-AA9A-366AF839FF03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CD016C-D853-4FA8-BD05-1E815EE6F547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CD016C-D853-4FA8-BD05-1E815EE6F547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CD016C-D853-4FA8-BD05-1E815EE6F547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CD016C-D853-4FA8-BD05-1E815EE6F547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74C2A169-3820-48AC-9CEF-B9AF3E2C30FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C2A169-3820-48AC-9CEF-B9AF3E2C30FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C2A169-3820-48AC-9CEF-B9AF3E2C30FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C2A169-3820-48AC-9CEF-B9AF3E2C30FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

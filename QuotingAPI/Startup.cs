@@ -33,7 +33,7 @@ namespace QuotingAPI
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Group Selector API - DEV/QA", Version = "v1" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Quoting API - Group 5", Version = "v1" });
             });
         }
 
@@ -59,7 +59,7 @@ namespace QuotingAPI
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Group Selector");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quoting");
             });
         }
     }

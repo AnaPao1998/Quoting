@@ -27,31 +27,41 @@ namespace QuotingAPI.Controllers
         {
             return _quotesLogic.GetQuoteList();
         }
-/*
-        // GET: api/Quotes/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST: api/Quotes
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] QuoteDTO newQuoteDTO)
         {
+            Console.WriteLine("QUOTE - " + newQuoteDTO.QuoteName);
+            List<QuoteProductsDTO> qp = new List<QuoteProductsDTO>();
+            qp = newQuoteDTO.QuoteLineItems;
+            foreach (QuoteProductsDTO quop in qp)
+            {
+                Console.WriteLine("Codigo producto: " + quop.ProductCode + "Codigo Cliente: " + quop.ClientCode
+                    + ", Cantidad: " + quop.Quantity + ", Precio: " + quop.Price + ", Estado de Venta: " + quop.IsSell);
+            }
+            
+            _quotesLogic.AddNewQuote(newQuoteDTO);
         }
+        /*
+                // GET: api/Quotes/5
+                [HttpGet("{id}", Name = "Get")]
+                public string Get(int id)
+                {
+                    return "value";
+                }
 
-        // PUT: api/Quotes/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+                // PUT: api/Quotes/5
+                [HttpPut("{id}")]
+                public void Put(int id, [FromBody] string value)
+                {
+                }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        */
+                // DELETE: api/ApiWithActions/5
+                [HttpDelete("{id}")]
+                public void Delete(int id)
+                {
+                }
+                */
     }
 }

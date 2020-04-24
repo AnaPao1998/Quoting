@@ -8,8 +8,18 @@ namespace QuotingAPI.Database
 {
     public class QuoteListDB : IQuoteListDB
     {
-        public List<QuoteProducts> GetAll()
+        private List<Quote> Quotes
+        {
+            get;
+            set;
+        }
 
+        public QuoteListDB()
+        {
+            Quotes = new List<Quote>();
+        }
+
+        public List<QuoteProducts> GetAll()
         {
            /* List<QuoteProducts> quoteproduct = new List<QuoteProducts>()
             {
@@ -27,8 +37,11 @@ namespace QuotingAPI.Database
                new QuoteProducts() { ProductCode = "SOCCER-001" , ClientCode = "MTR-64000001" , Quantity = 24  }, 
                new QuoteProducts() { ProductCode = "SOCCER-002" , ClientCode = "AMM-64000001" , Quantity = 13  }, 
                new QuoteProducts() { ProductCode = "BASKET-001" , ClientCode = "APR-24000001" , Quantity = 5 }
-            };
-             
+            };        
+        }
+        public void AddNew(Quote newQuote)
+        {
+            Quotes.Add(newQuote);
         }
 
     }

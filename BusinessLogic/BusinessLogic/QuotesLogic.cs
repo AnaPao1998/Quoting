@@ -36,7 +36,6 @@ namespace QuotingAPI.BusinessLogic
         private List<QuoteDTO> GetEmptyList()
         {
             List<QuoteDTO> emptyList = new List<QuoteDTO>()
-
             {
                 new QuoteDTO() {QuoteName="Cotizacion Fair Play", QuoteLineItems = new List<QuoteProductsDTO>() },
                 new QuoteDTO() {QuoteName="Cotizacion Impulse", QuoteLineItems = new List<QuoteProductsDTO>() }
@@ -63,6 +62,37 @@ namespace QuotingAPI.BusinessLogic
             quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount - rankingDiscount)); //Applying Discounts to Final Price
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
+        }
+
+        public void AddNewQuote(QuoteDTO newQuote)
+        {
+            // Mappers
+            Quote quote = new Quote();
+            quote.QuoteName = newQuote.QuoteName;
+
+            // Matching lists QuoteProductsDTO to QuoteProducts
+            List<QuoteProducts> quoteList = new List<QuoteProducts>();
+            List<QuoteProductsDTO> qp = new List<QuoteProductsDTO>();
+            qp = newQuote.QuoteLineItems;
+            foreach (QuoteProductsDTO qtpDTO in qp)
+            {
+                quoteList.Add
+                (
+                    new QuoteProducts()
+                    {
+                        ProductCode = qtpDTO.ProductCode,
+                        ClientCode = qtpDTO.ClientCode,
+                        Quantity = qtpDTO.Quantity,
+                        Price = qtpDTO.Price,
+                        IsSell = qtpDTO.IsSell
+                    }
+                );
+            }
+            // quote.QuoteLineItems Matched
+            quote.QuoteLineItems = quoteList;
+            
+            // Add to DB
+            _quoteListDB.AddNew(quote);
         }
     }
 }

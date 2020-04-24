@@ -29,7 +29,7 @@ namespace QuotingAPI
         {
             services.AddControllers();
             services.AddTransient<IQuotesLogic, QuotesLogic>();
-            services.AddTransient<IQuoteListDB, QuoteListDB>();
+            services.AddSingleton<IQuoteListDB, QuoteListDB>(); //Transient
 
             services.AddSwaggerGen(c =>
             {

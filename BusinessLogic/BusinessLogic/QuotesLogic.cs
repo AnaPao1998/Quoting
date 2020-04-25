@@ -12,7 +12,7 @@ namespace QuotingAPI.BusinessLogic
     public class QuotesLogic : IQuotesLogic
     {
         private readonly IQuoteListDB _quoteListDB;
-        private int cntId = 0;
+        //private int cntId = 0;
 
         public QuotesLogic(IQuoteListDB quoteListDB)
         {
@@ -20,18 +20,40 @@ namespace QuotingAPI.BusinessLogic
         }
         public List<QuoteDTO> GetQuoteList()
         {
-            List<QuoteProducts> allQuotes = _quoteListDB.GetAll();
+            List<Quote> allQuotes = _quoteListDB.GetAll();
 
-            List<QuoteDTO> listToAssign = GetEmptyList();
+            List<QuoteDTO> allQuotesDTO = new List<QuoteDTO>();
 
-            foreach (QuoteProducts quote in allQuotes)
+            foreach (Quote quote in allQuotes)
             {
-                string[] content = { "Fair Play", "Impulse" };
-                string groupQuote = content[new Random().Next(content.Length)];
-                AddToGroupList(quote, listToAssign, groupQuote);
+                List<QuoteProductsDTO> qplDto = new List<QuoteProductsDTO>();
+                List<QuoteProducts> qpl = new List<QuoteProducts>();
+                qpl = quote.QuoteLineItems;
+
+                foreach (QuoteProducts qp in qpl)
+                {
+                    qplDto.Add(
+                        new QuoteProductsDTO()
+                        {
+                            ProductCode=qp.ProductCode,
+                            Quantity=qp.Quantity,
+                            Price=qp.Price
+                        });
+                }
+                allQuotesDTO.Add(
+                    new QuoteDTO()
+                    {
+                        QuoteID=quote.QuoteID,
+                        QuoteName = quote.QuoteName,
+                        ClientCode =quote.ClientCode,
+                        QuoteLineItems=qplDto,
+                        IsSell=quote.IsSell
+                    }
+                );
+                    
             }
 
-            return listToAssign;
+            return allQuotesDTO;
         }
 
         private List<QuoteDTO> GetEmptyList()
@@ -45,7 +67,7 @@ namespace QuotingAPI.BusinessLogic
             return emptyList;
         }
 
-        private void AddToGroupList(QuoteProducts quote, List<QuoteDTO> listsToAssign, string groupName)
+        /*private void AddToGroupList(Quote quote, List<QuoteDTO> listsToAssign, string groupName)
         {
             QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
             quote.IsSell = new Random().Next(2) == 1;
@@ -63,14 +85,15 @@ namespace QuotingAPI.BusinessLogic
             quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount - rankingDiscount)); //Applying Discounts to Final Price
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
-        }
+        }*/
 
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
-            cntId += 1;
+            //cntId += 1;
+
             // Mappers
             Quote quote = new Quote();
-            quote.QuoteID = cntId; //Making ID unique
+            quote.QuoteID = new Random().Next(0, 99999);  //Making ID unique
             quote.QuoteName = newQuote.QuoteName;
             quote.ClientCode = newQuote.ClientCode;
             quote.IsSell = newQuote.IsSell;

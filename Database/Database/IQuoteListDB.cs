@@ -8,7 +8,7 @@ namespace QuotingAPI.Database
 {
     public interface IQuoteListDB
     {
-        List<QuoteProducts> GetAll();
+        List<Quote> GetAll();
         Quote AddNew(Quote newQuote);
     }
 }

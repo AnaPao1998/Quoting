@@ -39,9 +39,10 @@ namespace QuotingAPI.Database
                new QuoteProducts() { ProductCode = "BASKET-001" , ClientCode = "APR-24000001" , Quantity = 5 }
             };        
         }
-        public void AddNew(Quote newQuote)
+        public Quote AddNew(Quote newQuote)
         {
             Quotes.Add(newQuote);
+            return newQuote;
         }
 
     }

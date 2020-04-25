@@ -32,13 +32,14 @@ namespace QuotingAPI.Controllers
         [HttpPost]
         public void Post([FromBody] QuoteDTO newQuoteDTO)
         {
-            Console.WriteLine("QUOTE - " + newQuoteDTO.QuoteName);
+            Console.WriteLine("QUOTE - " + newQuoteDTO.QuoteName + ", id: " + newQuoteDTO.QuoteID + 
+                ", Client code: " + newQuoteDTO.ClientCode + ", Estado venta: " + newQuoteDTO.IsSell);
             List<QuoteProductsDTO> qp = new List<QuoteProductsDTO>();
             qp = newQuoteDTO.QuoteLineItems;
             foreach (QuoteProductsDTO quop in qp)
             {
-                Console.WriteLine("Codigo producto: " + quop.ProductCode + "Codigo Cliente: " + quop.ClientCode
-                    + ", Cantidad: " + quop.Quantity + ", Precio: " + quop.Price + ", Estado de Venta: " + quop.IsSell);
+                Console.WriteLine("Codigo producto: " + quop.ProductCode + ", Cantidad: " + quop.Quantity + ", Precio: " 
+                    + quop.Price);
             }
             
             _quotesLogic.AddNewQuote(newQuoteDTO);

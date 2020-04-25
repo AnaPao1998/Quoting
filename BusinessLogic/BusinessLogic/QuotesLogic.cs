@@ -12,6 +12,7 @@ namespace QuotingAPI.BusinessLogic
     public class QuotesLogic : IQuotesLogic
     {
         private readonly IQuoteListDB _quoteListDB;
+        private int cntId = 0;
 
         public QuotesLogic(IQuoteListDB quoteListDB)
         {
@@ -64,11 +65,15 @@ namespace QuotingAPI.BusinessLogic
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }
 
-        public void AddNewQuote(QuoteDTO newQuote)
+        public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
+            cntId += 1;
             // Mappers
             Quote quote = new Quote();
+            quote.QuoteID = cntId; //Making ID unique
             quote.QuoteName = newQuote.QuoteName;
+            quote.ClientCode = newQuote.ClientCode;
+            quote.IsSell = newQuote.IsSell;
 
             // Matching lists QuoteProductsDTO to QuoteProducts
             List<QuoteProducts> quoteList = new List<QuoteProducts>();
@@ -81,10 +86,8 @@ namespace QuotingAPI.BusinessLogic
                     new QuoteProducts()
                     {
                         ProductCode = qtpDTO.ProductCode,
-                        ClientCode = qtpDTO.ClientCode,
                         Quantity = qtpDTO.Quantity,
-                        Price = qtpDTO.Price,
-                        IsSell = qtpDTO.IsSell
+                        Price = qtpDTO.Price
                     }
                 );
             }
@@ -92,7 +95,36 @@ namespace QuotingAPI.BusinessLogic
             quote.QuoteLineItems = quoteList;
             
             // Add to DB
-            _quoteListDB.AddNew(quote);
+            Quote quoteInDB = _quoteListDB.AddNew(quote);
+
+            //Mapping back to DTO
+            QuoteDTO quoteInDTO = new QuoteDTO();
+
+            quoteInDTO.QuoteID = quoteInDB.QuoteID;
+            quoteInDTO.QuoteName = quoteInDB.QuoteName;
+            quoteInDTO.ClientCode = quoteInDB.ClientCode;
+            quoteInDTO.IsSell = quoteInDB.IsSell;
+
+            //Mapping back QuoteLineItems
+            List<QuoteProducts> quoteListBack = new List<QuoteProducts>();
+            List<QuoteProductsDTO> qpBack = new List<QuoteProductsDTO>();
+            quoteListBack = quoteInDB.QuoteLineItems;
+            foreach (QuoteProducts qtp in quoteListBack)
+            {
+                qpBack.Add
+                (
+                    new QuoteProductsDTO()
+                    {
+                        ProductCode = qtp.ProductCode,
+                        Quantity = qtp.Quantity,
+                        Price = qtp.Price
+                    }
+                );
+            }
+            // quote.QuoteLineItems Matched
+            quoteInDTO.QuoteLineItems = qpBack;
+
+            return quoteInDTO;
         }
     }
 }

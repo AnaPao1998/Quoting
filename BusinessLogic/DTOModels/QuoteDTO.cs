@@ -7,7 +7,10 @@ namespace QuotingAPI.DTOModels
 {
     public class QuoteDTO
     {
+        public int QuoteID { get; set; }
         public string QuoteName { get; set; }
-        public List <QuoteProductsDTO> QuoteLineItems { get; set; }
+        public string ClientCode { get; set; }
+        public List<QuoteProductsDTO> QuoteLineItems { get; set; }
+        public bool IsSell { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace QuotingAPI.BusinessLogic
 {
     public interface IQuotesLogic
     {
-        public List<QuoteDTO> GetQuoteList();
-        public void AddNewQuote(QuoteDTO newQuote);
+        List<QuoteDTO> GetQuoteList();
+        QuoteDTO AddNewQuote(QuoteDTO newQuote);
     }
 }

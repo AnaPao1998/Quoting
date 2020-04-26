@@ -17,9 +17,25 @@ namespace QuotingAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        const string SWAGGER_SECTION_SETTING_KEY = "SwaggerSettings";
+        const string SWAGGER_SECTION_SETTING_TITLE_KEY = "Title";
+        const string SWAGGER_SECTION_SETTING_VERSION_KEY = "Version";
+        
+        public Startup(IWebHostEnvironment environment)
         {
-            Configuration = configuration;
+            // Dynamic configuration 
+
+            // "appsettings." + env.EnvironmentName + ".json" 
+            //""-> String, {}-> Var
+
+            var builder = new ConfigurationBuilder() 
+
+                .SetBasePath(environment.ContentRootPath)
+                .AddJsonFile($"appsettings.{environment.EnvironmentName}.json")
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build(); //-> Singleton
+                
         }
 
         public IConfiguration Configuration { get; }
@@ -28,14 +44,34 @@ namespace QuotingAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddTransient<IQuotesLogic, QuotesLogic>();
             services.AddSingleton<IQuoteListDB, QuoteListDB>(); //Transient
 
+            var swaggerTitle = Configuration
+                .GetSection(SWAGGER_SECTION_SETTING_KEY)
+                .GetSection(SWAGGER_SECTION_SETTING_TITLE_KEY);
+                
+            var swaggerVersion = Configuration
+                .GetSection(SWAGGER_SECTION_SETTING_KEY)
+                .GetSection(SWAGGER_SECTION_SETTING_VERSION_KEY);
+
+            //  ENABLE SWAGGER
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Quoting API - Group 5", Version = "v1" });
+                c.SwaggerDoc
+                (
+                    swaggerVersion.Value, 
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                         Title = swaggerTitle.Value, //"Quoting API - Group 5", 
+                         Version = swaggerVersion.Value
+                    }
+                );
             });
         }
+
+        // PIPELINE
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -60,6 +96,7 @@ namespace QuotingAPI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quoting");
+            
             });
         }
     }

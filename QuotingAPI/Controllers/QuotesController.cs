@@ -13,8 +13,8 @@ using QuotingAPI.BusinessLogic;
 
 namespace QuotingAPI.Controllers
 {
+    [Route("api")]
     [ApiController]
-    [Route("api/quoting")]
 
     public class QuotesController : ControllerBase
     {
@@ -26,8 +26,10 @@ namespace QuotingAPI.Controllers
             _quotesLogic = quoteslogic;
             _configuration = configuration;
         }
-        // GET: api/Quotes
+        // GET: api/Quote
         [HttpGet]
+        [Route("quotes")]
+
         public IEnumerable<QuoteDTO> GetAll()
         {
             return _quotesLogic.GetQuoteList();
@@ -35,6 +37,8 @@ namespace QuotingAPI.Controllers
 
         // POST: api/Quotes
         [HttpPost]
+        [Route("quotes")]
+
         public QuoteDTO Post([FromBody] QuoteDTO newQuoteDTO)
         {
           var dbServer = _configuration.GetSection("Database").GetSection("connectionString");
@@ -58,7 +62,7 @@ namespace QuotingAPI.Controllers
         }
 
         // PUT: api/Quotes
-        [HttpPut("id/{quoteId}")] //update by id
+        [HttpPut("quotes/{quoteId}")] //update by id
         public void Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
@@ -75,7 +79,7 @@ namespace QuotingAPI.Controllers
         }
 
         // PUT: api/Quotes
-        [HttpPut("name/{quoteName}")] //update by name
+        [HttpPut("quotes/{quoteName}")] //update by name
         public void PutByName(string quoteName, [FromBody] QuoteDTO updatedQuote)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);
@@ -90,7 +94,7 @@ namespace QuotingAPI.Controllers
                 Console.WriteLine("Error 404, not found");
             }
         }
-        [HttpPut("id/{quoteId}/sell")] //do the sale by id
+        [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
         public void PutSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
@@ -104,7 +108,7 @@ namespace QuotingAPI.Controllers
                 Console.WriteLine("Error 404, not found");
             }
         }
-        [HttpPut("name/{quoteName}/sell")] //do the sale by name
+        [HttpPut("quotes/{quoteName}/sell")] //do the sale by name
         public void PutSellByName(string quoteName)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);
@@ -118,7 +122,7 @@ namespace QuotingAPI.Controllers
                 Console.WriteLine("Error 404, not found");
             }
         }
-        [HttpPut("id/{quoteId}/cancel-sell")] //do the sale by id
+        [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
         public void PutCancelSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
@@ -132,7 +136,7 @@ namespace QuotingAPI.Controllers
                 Console.WriteLine("Error 404, not found");
             }
         }
-        [HttpPut("name/{quoteName}/cancel-sell")] //do the sale by name
+        [HttpPut("quotes/{quoteName}/cancel-sell")] //do the sale by name
         public void PutCancelSellByName(string quoteName)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);

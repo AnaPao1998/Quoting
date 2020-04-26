@@ -12,7 +12,6 @@ namespace QuotingAPI.BusinessLogic
     public class QuotesLogic : IQuotesLogic
     {
         private readonly IQuoteListDB _quoteListDB;
-        //private int cntId = 0;
 
         public QuotesLogic(IQuoteListDB quoteListDB)
         {
@@ -56,36 +55,7 @@ namespace QuotingAPI.BusinessLogic
             return allQuotesDTO;
         }
 
-        /*private List<QuoteDTO> GetEmptyList()
-        {
-            List<QuoteDTO> emptyList = new List<QuoteDTO>()
-            {
-                new QuoteDTO() {QuoteName="Cotizacion Fair Play", QuoteLineItems = new List<QuoteProductsDTO>() },
-                new QuoteDTO() {QuoteName="Cotizacion Impulse", QuoteLineItems = new List<QuoteProductsDTO>() }
-
-            };
-            return emptyList;
-        }
-
-        private void AddToGroupList(Quote quote, List<QuoteDTO> listsToAssign, string groupName)
-        {
-            QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
-            quote.IsSell = new Random().Next(2) == 1;
-            float productInitialPrice = new Random().Next(150, 600); // Val Aleatorio inicial
-            float quantityDiscount = 0;
-            float rankingDiscount = 1 * (float)0.01; //Hardcoded ranking
-
-            if (quote.Quantity >= 12)
-            {
-                if (quote.Quantity >= 24)
-                    quantityDiscount = (float)0.10;
-                else
-                    quantityDiscount = (float)0.05;
-            }
-            quote.Price = (float)(productInitialPrice * quote.Quantity * (1 - quantityDiscount - rankingDiscount)); //Applying Discounts to Final Price
-
-            listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
-        }*/
+       
         private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
             quoteToUpdate.IsSell = updatedQuote.IsSell;
@@ -260,5 +230,28 @@ namespace QuotingAPI.BusinessLogic
 
             return quoteInDTO;
         }
+
+
+
+
+
+        
+       /*  private List<QuoteDTO> GetEmptyList()
+        {
+            List<QuoteDTO> emptyList = new List<QuoteDTO>()
+            {
+                new QuoteDTO() {QuoteName="Cotizacion Fair Play", ClientCode ="MTR-6400001" ,QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1 },
+                new QuoteDTO() {QuoteName="Cotizacion Impulse", ClientCode="RHA-6400000", QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1}
+            };
+            return emptyList;
+        }
+
+        private void AddToGroupList(QuoteProductsDTO quote, List<QuoteDTO> listsToAssign, string groupName)
+        {
+            QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
+            float productInitialPrice = new Random().Next(50, 1000); // Initial Price
+            QuoteProductsDTO newQuote =  DiscountApplier(quote, productInitialPrice* quote.Quantity);
+             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = newQuote.ProductCode, Quantity = newQuote.Quantity, Price = newQuote.Price });        
+        }*/
     }
 }

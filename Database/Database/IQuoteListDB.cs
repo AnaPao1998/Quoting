@@ -10,5 +10,6 @@ namespace QuotingAPI.Database
     {
         List<Quote> GetAll();
         Quote AddNew(Quote newQuote);
+        void Update(Quote updatedQuote);
     }
 }

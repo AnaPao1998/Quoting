@@ -86,7 +86,102 @@ namespace QuotingAPI.BusinessLogic
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }*/
+        private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
+        {
+            quoteToUpdate.IsSell = updatedQuote.IsSell;
+            quoteToUpdate.QuoteName = updatedQuote.QuoteName;
+            quoteToUpdate.QuoteLineItems = updatedQuote.QuoteLineItems;
+            quoteToUpdate.ClientCode = updatedQuote.ClientCode;  //Update QuoteDTO List
+            Quote upQuote = new Quote()
+            {
+                QuoteID = quoteToUpdate.QuoteID,
+                ClientCode = quoteToUpdate.ClientCode,
+                IsSell = quoteToUpdate.IsSell,
+                QuoteName = quoteToUpdate.QuoteName
+            };
 
+            //QuoteItems Mapping
+            List<QuoteProducts> quoteProducts = new List<QuoteProducts>();
+            foreach (QuoteProductsDTO qpdto in quoteToUpdate.QuoteLineItems)
+            {
+                qpdto.Price = DiscountApplier(qpdto.Quantity, qpdto.Price);
+                quoteProducts.Add
+                (
+                    new QuoteProducts()
+                    {
+                        ProductCode = qpdto.ProductCode,
+                        Quantity = qpdto.Quantity,
+                        Price = qpdto.Price
+                    }
+                );
+            }
+            upQuote.QuoteLineItems = quoteProducts;
+            _quoteListDB.Update(upQuote);
+        }
+        public void UpdateQuote(int id,QuoteDTO updatedQuote)//update by id
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach(QuoteDTO quoteToUpdate in quoteList) 
+            {
+                if(quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
+                {
+                    UpdateQuoteFunction(updatedQuote, quoteToUpdate); 
+                }
+            }
+        }
+        public void UpdateQuote(string name, QuoteDTO updatedQuote)//update by name
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
+                {
+                    UpdateQuoteFunction(updatedQuote, quoteToUpdate);
+                }
+            }
+        }
+
+        public void UpdateSale(int id, bool state) //change SaleState by id
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = state;
+                    UpdateQuoteFunction(quoteToUpdate, quoteToUpdate);
+                }
+            }
+        }
+        public void UpdateSale(string name, bool state) //change SaleState by name
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = state;
+                    UpdateQuoteFunction(quoteToUpdate, quoteToUpdate);
+                }
+            }
+        }
+        private float DiscountApplier(int quantity, float price)
+        {
+            float quantityDiscount = 0;
+            float rankingDiscount = 1 * (float)0.01; //Hardcoded ranking
+
+            if (quantity >= 12)
+            {
+                if (quantity >= 24)
+                    quantityDiscount = (float)0.10;
+                else
+                    quantityDiscount = (float)0.05;
+            }
+            return (float)(price * (1 - quantityDiscount - rankingDiscount));//Applying Discounts to Final Price
+        }
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
             //cntId += 1;
@@ -110,7 +205,8 @@ namespace QuotingAPI.BusinessLogic
                     {
                         ProductCode = qtpDTO.ProductCode,
                         Quantity = qtpDTO.Quantity,
-                        Price = qtpDTO.Price
+                        Price = DiscountApplier(qtpDTO.Quantity, qtpDTO.Price)
+
                     }
                 );
             }

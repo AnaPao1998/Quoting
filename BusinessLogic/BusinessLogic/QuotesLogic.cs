@@ -87,6 +87,84 @@ namespace QuotingAPI.BusinessLogic
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }*/
 
+        public void UpdateQuoteId(int id,QuoteDTO updatedQuote)//update by id
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach(QuoteDTO quoteToUpdate in quoteList) 
+            {
+                if(quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = updatedQuote.IsSell;
+                    quoteToUpdate.QuoteName = updatedQuote.QuoteName;
+                    quoteToUpdate.QuoteLineItems = updatedQuote.QuoteLineItems;
+                    quoteToUpdate.ClientCode = updatedQuote.ClientCode;  //Update QuoteDTO List
+                    Quote upQuote = new Quote()
+                    {
+                        QuoteID = quoteToUpdate.QuoteID,
+                        ClientCode = quoteToUpdate.ClientCode,
+                        IsSell = quoteToUpdate.IsSell,
+                        QuoteName = quoteToUpdate.QuoteName
+                    };
+
+                    //QuoteItems Mapping
+                    List<QuoteProducts> quoteProducts = new List<QuoteProducts>();
+                    foreach (QuoteProductsDTO qpdto in quoteToUpdate.QuoteLineItems)
+                    {
+                        quoteProducts.Add
+                        (
+                            new QuoteProducts()
+                            {
+                                ProductCode = qpdto.ProductCode,
+                                Quantity = qpdto.Quantity,
+                                Price = qpdto.Price
+                            }
+                        );
+                    }
+                    upQuote.QuoteLineItems = quoteProducts;
+                    _quoteListDB.Update(upQuote);
+                }
+            }
+        }
+        public void UpdateQuoteName(string name, QuoteDTO updatedQuote)//update by name
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = updatedQuote.IsSell;
+                    quoteToUpdate.QuoteName = updatedQuote.QuoteName;
+                    quoteToUpdate.QuoteLineItems = updatedQuote.QuoteLineItems;
+                    quoteToUpdate.ClientCode = updatedQuote.ClientCode;  //Update QuoteDTO List
+                    Quote upQuote = new Quote()
+                    {
+                        QuoteID = quoteToUpdate.QuoteID,
+                        ClientCode = quoteToUpdate.ClientCode,
+                        IsSell = quoteToUpdate.IsSell,
+                        QuoteName = quoteToUpdate.QuoteName
+                    };
+
+                    //QuoteItems Mapping
+                    List<QuoteProducts> quoteProducts = new List<QuoteProducts>();
+                    foreach (QuoteProductsDTO qpdto in quoteToUpdate.QuoteLineItems)
+                    {
+                        quoteProducts.Add
+                        (
+                            new QuoteProducts()
+                            {
+                                ProductCode = qpdto.ProductCode,
+                                Quantity = qpdto.Quantity,
+                                Price = qpdto.Price
+                            }
+                        );
+                    }
+                    upQuote.QuoteLineItems = quoteProducts;
+                    _quoteListDB.Update(upQuote);
+                }
+            }
+        }
+
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
             //cntId += 1;

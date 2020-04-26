@@ -28,6 +28,16 @@ namespace QuotingAPI.Database
             Quotes.Add(newQuote);
             return newQuote;
         }
-
+        public void Update(Quote updatedQuote)
+        {
+            var obj = Quotes.FirstOrDefault(q => q.QuoteID == updatedQuote.QuoteID);
+            if (obj != null)
+            {
+                obj.QuoteName = updatedQuote.QuoteName;
+                obj.ClientCode = updatedQuote.ClientCode;
+                obj.QuoteLineItems = updatedQuote.QuoteLineItems;
+                obj.IsSell = updatedQuote.IsSell;
+            }
+        }
     }
 }

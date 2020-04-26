@@ -10,11 +10,10 @@ namespace QuotingAPI.BusinessLogic
     {
         List<QuoteDTO> GetQuoteList();
         QuoteDTO AddNewQuote(QuoteDTO newQuote);
+        void UpdateQuote(string id,QuoteDTO updatedQuote);
+        void UpdateQuoteByName(string name,QuoteDTO updatedQuote);
 
-        void UpdateQuote(int id,QuoteDTO updatedQuote);
-        void UpdateQuote(string name,QuoteDTO updatedQuote);
-
-        void UpdateSale(int id, bool state);
-        void UpdateSale(string name, bool state);
+        void UpdateSale(string id, bool state);
+        void UpdateSaleByName(string name, bool state);
     }
 }

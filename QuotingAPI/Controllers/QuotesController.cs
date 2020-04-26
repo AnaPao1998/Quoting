@@ -52,7 +52,7 @@ namespace QuotingAPI.Controllers
             if (exists != null)
             {
                 Console.WriteLine("put by id => Id: " + quoteId + ", Name: " + updatedQuote.QuoteName + ", SellState: " + updatedQuote.IsSell + ", ClientCode: " + updatedQuote.ClientCode);
-                _quotesLogic.UpdateQuoteId(quoteId, updatedQuote);
+                _quotesLogic.UpdateQuote(quoteId, updatedQuote);
             }
             else
             {
@@ -67,9 +67,64 @@ namespace QuotingAPI.Controllers
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);
             if (exists != null)
             {
-
                 Console.WriteLine("put by name => Name: " + quoteName + ", SellState: " + updatedQuote.IsSell + ", ClientCode: " + updatedQuote.ClientCode);
-                _quotesLogic.UpdateQuoteName(quoteName, updatedQuote);
+                _quotesLogic.UpdateQuote(quoteName, updatedQuote);
+            }
+            else
+            {
+                Console.WriteLine("Error 404, not found");
+            }
+        }
+        [HttpPut("id/{quoteId}/sell")] //do the sale by id
+        public void PutSell(int quoteId)
+        {
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
+                Console.WriteLine("Sell => Name: " + quoteId);
+                _quotesLogic.UpdateSale(quoteId,true);
+            }
+            else
+            {
+                Console.WriteLine("Error 404, not found");
+            }
+        }
+        [HttpPut("name/{quoteName}/sell")] //do the sale by name
+        public void PutSell(string quoteName)
+        {
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);
+            if (exists != null)
+            {
+                Console.WriteLine("Sell => Name: " + quoteName);
+                _quotesLogic.UpdateSale(quoteName,true);
+            }
+            else
+            {
+                Console.WriteLine("Error 404, not found");
+            }
+        }
+        [HttpPut("id/{quoteId}/cancel-sell")] //do the sale by id
+        public void PutCancelSell(int quoteId)
+        {
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
+                Console.WriteLine("Sell => Name: " + quoteId);
+                _quotesLogic.UpdateSale(quoteId, false);
+            }
+            else
+            {
+                Console.WriteLine("Error 404, not found");
+            }
+        }
+        [HttpPut("name/{quoteName}/cancel-sell")] //do the sale by name
+        public void PutCancelSell(string quoteName)
+        {
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteName == quoteName);
+            if (exists != null)
+            {
+                Console.WriteLine("Sell => Name: " + quoteName);
+                _quotesLogic.UpdateSale(quoteName, false);
             }
             else
             {

@@ -86,7 +86,7 @@ namespace QuotingAPI.BusinessLogic
 
             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = quote.ProductCode, ClientCode = quote.ClientCode, Quantity = quote.Quantity, Price = quote.Price, IsSell = quote.IsSell });
         }*/
-        private void UpdateQuote(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
+        private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
             quoteToUpdate.IsSell = updatedQuote.IsSell;
             quoteToUpdate.QuoteName = updatedQuote.QuoteName;
@@ -117,18 +117,18 @@ namespace QuotingAPI.BusinessLogic
             upQuote.QuoteLineItems = quoteProducts;
             _quoteListDB.Update(upQuote);
         }
-        public void UpdateQuoteId(int id,QuoteDTO updatedQuote)//update by id
+        public void UpdateQuote(int id,QuoteDTO updatedQuote)//update by id
         {
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach(QuoteDTO quoteToUpdate in quoteList) 
             {
                 if(quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
                 {
-                    UpdateQuote(updatedQuote, quoteToUpdate); 
+                    UpdateQuoteFunction(updatedQuote, quoteToUpdate); 
                 }
             }
         }
-        public void UpdateQuoteName(string name, QuoteDTO updatedQuote)//update by name
+        public void UpdateQuote(string name, QuoteDTO updatedQuote)//update by name
         {
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
@@ -136,7 +136,34 @@ namespace QuotingAPI.BusinessLogic
 
                 if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
                 {
-                    UpdateQuote(updatedQuote, quoteToUpdate);
+                    UpdateQuoteFunction(updatedQuote, quoteToUpdate);
+                }
+            }
+        }
+
+        public void UpdateSale(int id, bool state) //change SaleState by id
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = state;
+                    UpdateQuoteFunction(quoteToUpdate, quoteToUpdate);
+                }
+            }
+        }
+        public void UpdateSale(string name, bool state) //change SaleState by name
+        {
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToUpdate in quoteList)
+            {
+
+                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
+                {
+                    quoteToUpdate.IsSell = state;
+                    UpdateQuoteFunction(quoteToUpdate, quoteToUpdate);
                 }
             }
         }

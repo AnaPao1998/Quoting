@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using QuotingAPI.BusinessLogic;
 using QuotingAPI.Database;
 
@@ -72,7 +73,6 @@ namespace QuotingAPI
         }
 
         // PIPELINE
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

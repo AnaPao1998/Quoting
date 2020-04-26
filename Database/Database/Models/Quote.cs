@@ -7,7 +7,7 @@ namespace QuotingAPI.Database.Models
 {
     public class Quote
     {
-        public int QuoteID { get; set; }
+        public string QuoteID { get; set; }
         public string QuoteName { get; set; }
         public string ClientCode { get; set; }
         public List<QuoteProducts> QuoteLineItems { get; set; }

@@ -39,5 +39,15 @@ namespace QuotingAPI.Database
                 obj.IsSell = updatedQuote.IsSell;
             }
         }
+
+        public void Delete(Quote deletedQuote)
+        {
+            var obj = Quotes.FirstOrDefault(q => q.QuoteID == deletedQuote.QuoteID);
+            if (obj != null)
+            {
+                Quotes.RemoveAll(quote => quote.QuoteID.Equals(deletedQuote));
+            }
+
+        }
     }
 }

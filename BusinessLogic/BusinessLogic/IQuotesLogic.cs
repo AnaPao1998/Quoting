@@ -15,5 +15,7 @@ namespace QuotingAPI.BusinessLogic
 
         void UpdateSale(string id, bool state);
         void UpdateSaleByName(string name, bool state);
+
+        void DeleteByID(string id);
     }
 }

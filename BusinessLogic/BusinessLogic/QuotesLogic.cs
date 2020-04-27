@@ -34,28 +34,28 @@ namespace QuotingAPI.BusinessLogic
                     qplDto.Add(
                         new QuoteProductsDTO()
                         {
-                            ProductCode=qp.ProductCode,
-                            Quantity=qp.Quantity,
-                            Price=qp.Price
+                            ProductCode = qp.ProductCode,
+                            Quantity = qp.Quantity,
+                            Price = qp.Price
                         });
                 }
                 allQuotesDTO.Add(
                     new QuoteDTO()
                     {
-                        QuoteID=quote.QuoteID,
+                        QuoteID = quote.QuoteID,
                         QuoteName = quote.QuoteName,
-                        ClientCode =quote.ClientCode,
-                        QuoteLineItems=qplDto,
-                        IsSell=quote.IsSell
+                        ClientCode = quote.ClientCode,
+                        QuoteLineItems = qplDto,
+                        IsSell = quote.IsSell
                     }
                 );
-                    
+
             }
 
             return allQuotesDTO;
         }
 
-       
+
         private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
             quoteToUpdate.IsSell = updatedQuote.IsSell;
@@ -88,17 +88,30 @@ namespace QuotingAPI.BusinessLogic
             upQuote.QuoteLineItems = quoteProducts;
             _quoteListDB.Update(upQuote);
         }
-        public void UpdateQuote(string id,QuoteDTO updatedQuote)//update by id
+        public void UpdateQuote(string id, QuoteDTO updatedQuote)//update by id
         {
             List<QuoteDTO> quoteList = GetQuoteList();
-            foreach(QuoteDTO quoteToUpdate in quoteList) 
+            foreach (QuoteDTO quoteToUpdate in quoteList)
             {
-                if(quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
+                if (quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
                 {
-                    UpdateQuoteFunction(updatedQuote, quoteToUpdate); 
+                    UpdateQuoteFunction(updatedQuote, quoteToUpdate);
                 }
             }
         }
+        public void DeleteByID(string quoteID)
+        {
+
+            List<QuoteDTO> quoteList = GetQuoteList();
+            foreach (QuoteDTO quoteToDelete in quoteList)
+            {
+                if (quoteToDelete.QuoteID == quoteID) //Search for quoteToDelete by id
+                {
+                    quoteList.RemoveAll(quote => quote.QuoteID.Equals(quoteID));
+                }
+            }
+        }
+
         public void UpdateQuoteByName(string name, QuoteDTO updatedQuote)//update by name
         {
             List<QuoteDTO> quoteList = GetQuoteList();
@@ -159,10 +172,10 @@ namespace QuotingAPI.BusinessLogic
         {
 
             IEnumerable<Quote> quoteList = _quoteListDB.GetAll();
-            int quoteID= quoteList.Count()+1;
-            
+            int quoteID = quoteList.Count() + 1;
+
             groupQuote.QuoteID = "QUOTE-" + quoteID;
-            
+
             return groupQuote;
         }
 
@@ -173,7 +186,7 @@ namespace QuotingAPI.BusinessLogic
             // Mappers
             Quote quote = new Quote();
             quote.QuoteID = generateCode(quote).QuoteID;
-           // quote.QuoteID = new Random().Next(0, 99999);  //Making ID unique
+            // quote.QuoteID = new Random().Next(0, 99999);  //Making ID unique
             quote.QuoteName = newQuote.QuoteName;
             quote.ClientCode = newQuote.ClientCode;
             quote.IsSell = newQuote.IsSell;
@@ -197,7 +210,7 @@ namespace QuotingAPI.BusinessLogic
             }
             // quote.QuoteLineItems Matched
             quote.QuoteLineItems = quoteList;
-            
+
             // Add to DB
             Quote quoteInDB = _quoteListDB.AddNew(quote);
 
@@ -233,25 +246,22 @@ namespace QuotingAPI.BusinessLogic
 
 
 
+        /*  private List<QuoteDTO> GetEmptyList()
+         {
+             List<QuoteDTO> emptyList = new List<QuoteDTO>()
+             {
+                 new QuoteDTO() {QuoteName="Cotizacion Fair Play", ClientCode ="MTR-6400001" ,QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1 },
+                 new QuoteDTO() {QuoteName="Cotizacion Impulse", ClientCode="RHA-6400000", QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1}
+             };
+             return emptyList;
+         }
 
-
-        
-       /*  private List<QuoteDTO> GetEmptyList()
-        {
-            List<QuoteDTO> emptyList = new List<QuoteDTO>()
-            {
-                new QuoteDTO() {QuoteName="Cotizacion Fair Play", ClientCode ="MTR-6400001" ,QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1 },
-                new QuoteDTO() {QuoteName="Cotizacion Impulse", ClientCode="RHA-6400000", QuoteLineItems = new List<QuoteProductsDTO>(), IsSell = new Random().Next(2) == 1}
-            };
-            return emptyList;
-        }
-
-        private void AddToGroupList(QuoteProductsDTO quote, List<QuoteDTO> listsToAssign, string groupName)
-        {
-            QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
-            float productInitialPrice = new Random().Next(50, 1000); // Initial Price
-            QuoteProductsDTO newQuote =  DiscountApplier(quote, productInitialPrice* quote.Quantity);
-             listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = newQuote.ProductCode, Quantity = newQuote.Quantity, Price = newQuote.Price });        
-        }*/
+         private void AddToGroupList(QuoteProductsDTO quote, List<QuoteDTO> listsToAssign, string groupName)
+         {
+             QuoteDTO listToAssign = listsToAssign.Find(group => group.QuoteName.Contains(groupName.ToString()));
+             float productInitialPrice = new Random().Next(50, 1000); // Initial Price
+             QuoteProductsDTO newQuote =  DiscountApplier(quote, productInitialPrice* quote.Quantity);
+              listToAssign.QuoteLineItems.Add(new QuoteProductsDTO() { ProductCode = newQuote.ProductCode, Quantity = newQuote.Quantity, Price = newQuote.Price });        
+         }*/
     }
 }

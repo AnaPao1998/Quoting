@@ -45,7 +45,7 @@ namespace QuotingAPI.Database
             var obj = Quotes.FirstOrDefault(q => q.QuoteID == deletedQuote.QuoteID);
             if (obj != null)
             {
-                Quotes.RemoveAll(quote => quote.QuoteID.Equals(deletedQuote));
+                Quotes.Remove(obj);
             }
 
         }

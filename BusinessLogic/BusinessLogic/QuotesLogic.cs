@@ -103,12 +103,19 @@ namespace QuotingAPI.BusinessLogic
         {
 
             List<QuoteDTO> quoteList = GetQuoteList();
-            foreach (QuoteDTO quoteToDelete in quoteList)
+
+            var obj = quoteList.FirstOrDefault(q => q.QuoteID == quoteID);//Search for First quoteToDelete by id
+            if (obj != null)
             {
-                if (quoteToDelete.QuoteID == quoteID) //Search for quoteToDelete by id
+                Quote delQuote = new Quote()
                 {
-                    quoteList.RemoveAll(quote => quote.QuoteID.Equals(quoteID));
-                }
+                    QuoteID = obj.QuoteID,
+                    ClientCode = obj.ClientCode,
+                    IsSell = obj.IsSell,
+                    QuoteName = obj.QuoteName
+                };
+                _quoteListDB.Delete(delQuote);
+                quoteList.Remove(obj);
             }
         }
 

@@ -197,7 +197,7 @@ namespace QuotingAPI.BusinessLogic
             // quote.QuoteID = new Random().Next(0, 99999);  //Making ID unique
             quote.QuoteName = newQuote.QuoteName;
             quote.ClientCode = newQuote.ClientCode;
-            quote.IsSell = newQuote.IsSell;
+            quote.IsSell = false;
 
             // Matching lists QuoteProductsDTO to QuoteProducts
             List<QuoteProducts> quoteList = new List<QuoteProducts>();

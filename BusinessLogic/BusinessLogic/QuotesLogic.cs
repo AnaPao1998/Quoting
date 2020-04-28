@@ -146,20 +146,7 @@ namespace QuotingAPI.BusinessLogic
             }
         }
 
-        public void UpdateQuoteByName(string name, QuoteDTO updatedQuote)//update by name
-        {
-            List<QuoteDTO> quoteList = GetQuoteList();
-            foreach (QuoteDTO quoteToUpdate in quoteList)
-            {
-
-                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
-                {
-                    UpdateQuoteFunction(updatedQuote, quoteToUpdate);
-                }
-            }
-        }
-
-        public void UpdateSale(string id, bool state) //change SaleState by id
+               public void UpdateSale(string id, bool state) //change SaleState by id
         {
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
@@ -172,19 +159,7 @@ namespace QuotingAPI.BusinessLogic
                 }
             }
         }
-        public void UpdateSaleByName(string name, bool state) //change SaleState by name
-        {
-            List<QuoteDTO> quoteList = GetQuoteList();
-            foreach (QuoteDTO quoteToUpdate in quoteList)
-            {
-
-                if (quoteToUpdate.QuoteName == name) //Search for quoteToUpdate by id
-                {
-                    quoteToUpdate.IsSell = state;
-                    UpdateQuoteSaleState(quoteToUpdate);
-                }
-            }
-        }
+        
         private QuoteProductsDTO DiscountApplier(QuoteProductsDTO quote, float price)
         {
             float quantityDiscount = 0;
@@ -277,7 +252,6 @@ namespace QuotingAPI.BusinessLogic
 
             return quoteInDTO;
         }
-
 
 
         /*  private List<QuoteDTO> GetEmptyList()

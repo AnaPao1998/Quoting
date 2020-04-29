@@ -177,15 +177,31 @@ namespace QuotingAPI.BusinessLogic
             return quote;
         }
 
-        public Quote generateCode(Quote groupQuote)
+        public string generateCode()
         {
+            string q = "";
+            string numS = "";
+            string quoteId = "";
+            int num = 1;
 
-            IEnumerable<Quote> quoteList = _quoteListDB.GetAll();
-            int quoteID = quoteList.Count() + 1;
+            List<Quote> quoteList = _quoteListDB.GetAll();
+            if (quoteList.Count == 0)
+            {
+                num = 1;
+            }
+            else
+            {
+                foreach (Quote quoteToUpdate in quoteList)
+                {
+                    q = quoteToUpdate.QuoteID;
+                }
 
-            groupQuote.QuoteID = "QUOTE-" + quoteID;
+                numS = q.Remove(0, 6);
+                num = Int32.Parse(numS) + 1;
+            }
 
-            return groupQuote;
+            quoteId = "QUOTE-" + num.ToString();
+            return quoteId;
         }
 
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
@@ -193,7 +209,7 @@ namespace QuotingAPI.BusinessLogic
             //cntId += 1;
             // Mappers
             Quote quote = new Quote();
-            quote.QuoteID = generateCode(quote).QuoteID;
+            quote.QuoteID = generateCode();
             // quote.QuoteID = new Random().Next(0, 99999);  //Making ID unique
             quote.QuoteName = newQuote.QuoteName;
             quote.ClientCode = newQuote.ClientCode;

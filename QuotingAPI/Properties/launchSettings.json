@@ -35,7 +35,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "QA"
       },
-      "applicationUrl": "http://localhost:4401"
+      "applicationUrl": "http://localhost:4402"
     }
     
   }

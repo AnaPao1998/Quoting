@@ -63,7 +63,7 @@ namespace QuotingAPI.Controllers
 
         // PUT: api/Quotes
         [HttpPut("quotes/{quoteId}")] //update by id
-        public void Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
+        public bool Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
@@ -71,56 +71,64 @@ namespace QuotingAPI.Controllers
                 Console.WriteLine("PUT BY ID =>\t | ID : " + quoteId + " | NAME : " + updatedQuote.QuoteName +
                  " | SellState : " + updatedQuote.IsSell + " | CLIENT CODE : " + updatedQuote.ClientCode);
                 _quotesLogic.UpdateQuote(quoteId, updatedQuote);
+                return true;
             }
             else
             {
                 Console.WriteLine("Error 404, not found");
+                return false;
             }
         }
 
         [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
-        public void PutSell(string quoteId)
+        public bool PutSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 Console.WriteLine("Sell => ID : " + quoteId);
                 _quotesLogic.UpdateSale(quoteId, true);
+                return true;
             }
             else
             {
                 Console.WriteLine("Error 404, not found");
+                return false;
             }
         }
 
         [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
-        public void PutCancelSell(string quoteId)
+        public bool PutCancelSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 Console.WriteLine("CANCEL SELL => ID: " + quoteId);
                 _quotesLogic.UpdateSale(quoteId, false);
+                return true;
             }
             else
             {
                 Console.WriteLine("Error 404, not found");
+                return false;
             }
         }
 
         // DELETE: api/Quotes
         [HttpDelete("quotes/{quoteId}")] //delete by id
-        public void Delete(string quoteId)
+        public bool Delete(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 Console.WriteLine("DELETE BY ID =>\t | ID : " + quoteId);
                 _quotesLogic.DeleteByID(quoteId);
+                return true;
             }
             else
             {
                 Console.WriteLine("Error 404, not found");
+                return false;
             }
         }
 

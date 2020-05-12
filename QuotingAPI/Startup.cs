@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using QuotingAPI.BusinessLogic;
 using QuotingAPI.Database;
+using QuotingAPI.Middlewares;
 
 namespace QuotingAPI
 {
@@ -80,6 +81,8 @@ namespace QuotingAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExcepHandlerMiddleware();
 
             //app.UseHttpsRedirection();
 

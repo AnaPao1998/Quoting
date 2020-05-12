@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using QuotingAPI.DTOModels;
 using QuotingAPI.BusinessLogic;
+using QuotingAPI.Exceptions;
 
 namespace QuotingAPI.Controllers
 {
@@ -68,14 +69,13 @@ namespace QuotingAPI.Controllers
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
-                Console.WriteLine("PUT BY ID =>\t | ID : " + quoteId + " | NAME : " + updatedQuote.QuoteName +
-                 " | SellState : " + updatedQuote.IsSell + " | CLIENT CODE : " + updatedQuote.ClientCode);
                 _quotesLogic.UpdateQuote(quoteId, updatedQuote);
             }
             else
             {
-                Console.WriteLine("Error 404, not found");
+                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
             }
+            
         }
 
         [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
@@ -84,12 +84,11 @@ namespace QuotingAPI.Controllers
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
-                Console.WriteLine("Sell => ID : " + quoteId);
                 _quotesLogic.UpdateSale(quoteId, true);
             }
             else
             {
-                Console.WriteLine("Error 404, not found");
+                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
             }
         }
 
@@ -99,12 +98,11 @@ namespace QuotingAPI.Controllers
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
-                Console.WriteLine("CANCEL SELL => ID: " + quoteId);
                 _quotesLogic.UpdateSale(quoteId, false);
             }
             else
             {
-                Console.WriteLine("Error 404, not found");
+                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
             }
         }
 
@@ -115,12 +113,11 @@ namespace QuotingAPI.Controllers
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
-                Console.WriteLine("DELETE BY ID =>\t | ID : " + quoteId);
                 _quotesLogic.DeleteByID(quoteId);
             }
             else
             {
-                Console.WriteLine("Error 404, not found");
+                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
             }
         }
 

@@ -7,21 +7,24 @@ using QuotingAPI.Database.Models;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Services;
 
 namespace QuotingAPI.Database
 {
     public class QuoteListDB : IQuoteListDB
     {
         private readonly IConfiguration _configuration;
+        private readonly IPricingBookBackingService _productBackingService;
 
         private string _dbPath;
         private DBContext _dbContext;
 
         private List<Quote> Quotes { get; set; }
 
-        public QuoteListDB(IConfiguration configuration)
+        public QuoteListDB(IConfiguration configuration, IPricingBookBackingService productBackingService)
         {
             _configuration = configuration;
+            _productBackingService = productBackingService;
             InitDBContext();
         }
 
@@ -36,9 +39,11 @@ namespace QuotingAPI.Database
         public void SaveChanges()
         {
             File.WriteAllText(_dbPath, JsonConvert.SerializeObject(_dbContext));
+            UpdateQuotesBs();
         }
         public List<Quote> GetAll()
         {
+            UpdateQuotesBs();
             return Quotes;
         }
         public Quote AddNew(Quote newQuote)
@@ -74,6 +79,22 @@ namespace QuotingAPI.Database
             SaveChanges();
             return wasRemoved;
 
+        }
+
+        public void UpdateQuotesBs()
+        {
+            List<ProductBsDTO> productos = _productBackingService.GetAllProduct().Result;
+            foreach(ProductBsDTO p in productos)
+            {
+                foreach(Quote q in Quotes)
+                {
+                    foreach(QuoteProducts qp in q.QuoteLineItems)
+                    {
+                        if (qp.ProductCode == p.ProductCode)
+                            qp.Price = (float)p.FixedPrice;
+                    }
+                }
+            }
         }
     }
 }

@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using QuotingAPI.DTOModels;
 using QuotingAPI.Database;
 using QuotingAPI.Database.Models;
-
+using Services;
 
 namespace QuotingAPI.BusinessLogic
 {
     public class QuotesLogic : IQuotesLogic
     {
         private readonly IQuoteListDB _quoteListDB;
+        
 
         public QuotesLogic(IQuoteListDB quoteListDB)
         {

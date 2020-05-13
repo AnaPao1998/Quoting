@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using QuotingAPI.BusinessLogic;
 using QuotingAPI.Database;
+using Services;
 
 namespace QuotingAPI
 {
@@ -48,6 +49,8 @@ namespace QuotingAPI
 
             services.AddTransient<IQuotesLogic, QuotesLogic>();
             services.AddSingleton<IQuoteListDB, QuoteListDB>(); //Transient
+
+            services.AddTransient<IPricingBookBackingService, PricingBookBackingService>(); //Transient
 
             var swaggerTitle = Configuration
                 .GetSection(SWAGGER_SECTION_SETTING_KEY)

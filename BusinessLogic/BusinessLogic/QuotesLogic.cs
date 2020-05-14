@@ -6,20 +6,24 @@ using QuotingAPI.DTOModels;
 using QuotingAPI.Database;
 using QuotingAPI.Database.Models;
 using Services;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace QuotingAPI.BusinessLogic
 {
     public class QuotesLogic : IQuotesLogic
     {
         private readonly IQuoteListDB _quoteListDB;
-        
-
-        public QuotesLogic(IQuoteListDB quoteListDB)
+        public readonly ILogger<QuoteListDB> _logger;
+        public QuotesLogic(IQuoteListDB quoteListDB, ILogger<QuoteListDB> logger)
         {
             _quoteListDB = quoteListDB;
+            _logger = logger;
         }
         public List<QuoteDTO> GetQuoteList()
         {
+            _logger.LogInformation("Acquiring quote list");
+
             List<Quote> allQuotes = _quoteListDB.GetAll();
 
             List<QuoteDTO> allQuotesDTO = new List<QuoteDTO>();
@@ -59,6 +63,7 @@ namespace QuotingAPI.BusinessLogic
 
         private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
+            _logger.LogInformation("Quote update (Function)");
             quoteToUpdate.IsSell = updatedQuote.IsSell;
             quoteToUpdate.QuoteName = updatedQuote.QuoteName;
             quoteToUpdate.QuoteLineItems = updatedQuote.QuoteLineItems;
@@ -91,6 +96,7 @@ namespace QuotingAPI.BusinessLogic
         }
         private void UpdateQuoteSaleState(QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
+            _logger.LogInformation("Quote update (Sale state)");
             Quote upQuote = new Quote()
             {
                 QuoteID = quoteToUpdate.QuoteID,
@@ -118,10 +124,7 @@ namespace QuotingAPI.BusinessLogic
         }
         public void UpdateQuote(string id, QuoteDTO updatedQuote)//update by id
         {
-            if (string.IsNullOrEmpty(updatedQuote.ClientCode))
-            {
-                throw new Exception("Can't be empty");
-            }
+            _logger.LogInformation("Quote update");
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
@@ -133,11 +136,7 @@ namespace QuotingAPI.BusinessLogic
         }
         public void DeleteByID(string quoteID)
         {
-            if (string.IsNullOrEmpty(quoteID))
-            {
-                throw new Exception("Can't be empty ");
-            }
-
+            _logger.LogInformation("Deletion");
             List<QuoteDTO> quoteList = GetQuoteList();
 
             var obj = quoteList.FirstOrDefault(q => q.QuoteID == quoteID);//Search for First quoteToDelete by id
@@ -157,10 +156,7 @@ namespace QuotingAPI.BusinessLogic
 
         public void UpdateSale(string id, bool state) //change SaleState by id
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new Exception("Can't be empty ");
-            }
+            _logger.LogInformation("Sale update");
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
@@ -175,6 +171,7 @@ namespace QuotingAPI.BusinessLogic
 
         private QuoteProductsDTO DiscountApplier(QuoteProductsDTO quote, float price)
         {
+            _logger.LogInformation("Discount applied");
             float quantityDiscount = 0;
             float rankingDiscount = 1 * (float)0.01; //Hardcoded ranking
 
@@ -219,14 +216,7 @@ namespace QuotingAPI.BusinessLogic
 
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
-            if (newQuote.QuoteName.Length < 5)
-            {
-                throw new Exception("Quote name must have more than five words");
-            }
-            if (string.IsNullOrEmpty(newQuote.QuoteName))
-            {
-                throw new Exception("Quote name can't be empty");
-            }
+            _logger.LogInformation("New quote");
             //cntId += 1;
             // Mappers
             Quote quote = new Quote();

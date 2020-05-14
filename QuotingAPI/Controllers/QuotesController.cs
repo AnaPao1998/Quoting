@@ -64,12 +64,13 @@ namespace QuotingAPI.Controllers
 
         // PUT: api/Quotes
         [HttpPut("quotes/{quoteId}")] //update by id
-        public void Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
+        public bool Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 _quotesLogic.UpdateQuote(quoteId, updatedQuote);
+                return true;
             }
             else
             {
@@ -79,12 +80,13 @@ namespace QuotingAPI.Controllers
         }
 
         [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
-        public void PutSell(string quoteId)
+        public bool PutSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 _quotesLogic.UpdateSale(quoteId, true);
+                return true;
             }
             else
             {
@@ -93,12 +95,13 @@ namespace QuotingAPI.Controllers
         }
 
         [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
-        public void PutCancelSell(string quoteId)
+        public bool PutCancelSell(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 _quotesLogic.UpdateSale(quoteId, false);
+                return true;
             }
             else
             {
@@ -108,12 +111,13 @@ namespace QuotingAPI.Controllers
 
         // DELETE: api/Quotes
         [HttpDelete("quotes/{quoteId}")] //delete by id
-        public void Delete(string quoteId)
+        public bool Delete(string quoteId)
         {
             var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
             if (exists != null)
             {
                 _quotesLogic.DeleteByID(quoteId);
+                return true;
             }
             else
             {

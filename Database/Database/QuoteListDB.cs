@@ -8,6 +8,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Services;
+using BackingServices.Exceptions;
 
 namespace QuotingAPI.Database
 {
@@ -31,10 +32,19 @@ namespace QuotingAPI.Database
 
         public void InitDBContext()
         {
-            _dbPath = _configuration.GetSection("Database").GetSection("connectionString").Value;
-            Log.Logger.Information("test");
-            _dbContext = JsonConvert.DeserializeObject<DBContext>(File.ReadAllText(_dbPath));
-            Quotes = _dbContext.Quote;
+            try
+            {
+                _dbPath = _configuration.GetSection("Database").GetSection("connectionString").Value;
+                _dbContext = JsonConvert.DeserializeObject<DBContext>(File.ReadAllText(_dbPath));
+                Quotes = _dbContext.Quote;
+                Log.Logger.Information("Succesful connection to Database at: " + _dbPath);
+            }
+            catch
+            {
+                Log.Logger.Information("Error: Missing JSON file");
+                throw new DatabaseException("Missing JSON file at: " + _dbPath);
+            }
+            
         }
 
         public void SaveChanges()
@@ -63,9 +73,13 @@ namespace QuotingAPI.Database
                 obj.QuoteLineItems = updatedQuote.QuoteLineItems;
                 obj.IsSell = updatedQuote.IsSell;
             }
+            else
+            {
+                Log.Logger.Information("ID not found : " + updatedQuote.QuoteID);
+                throw new DatabaseException("ID not found : " + updatedQuote.QuoteID);
+            }
             SaveChanges();
             return obj;
-
 
         }
 
@@ -76,6 +90,11 @@ namespace QuotingAPI.Database
             {
                 Quotes.Remove(obj);
             }
+            else
+            {
+                Log.Logger.Information("ID not found : " + deletedQuote.QuoteID);
+                throw new DatabaseException("ID not found : " + deletedQuote.QuoteID);
+            }
             bool wasRemoved = Quotes.Remove(deletedQuote);
             SaveChanges();
             return wasRemoved;
@@ -84,17 +103,26 @@ namespace QuotingAPI.Database
 
         public void UpdateQuotesBs()
         {
-            List<ProductBsDTO> productos = _productBackingService.GetAllProduct().Result;
-            foreach(ProductBsDTO p in productos)
+            try
             {
-                foreach(Quote q in Quotes)
+                List<ProductBsDTO> productos = _productBackingService.GetAllProduct().Result;
+                foreach (ProductBsDTO p in productos)
                 {
-                    foreach(QuoteProducts qp in q.QuoteLineItems)
+                    foreach (Quote q in Quotes)
                     {
-                        if (qp.ProductCode == p.ProductCode)
-                            qp.Price = (float)p.FixedPrice;
+                        foreach (QuoteProducts qp in q.QuoteLineItems)
+                        {
+                            if (qp.ProductCode == p.ProductCode)
+                                qp.Price = p.PromotionPrice;
+                        }
                     }
                 }
+               
+            }
+            catch 
+            {
+                Log.Logger.Information("Conection with Pricing Books is not working");
+                throw new DatabaseException("Conection with Pricing Books is not working");
             }
         }
     }

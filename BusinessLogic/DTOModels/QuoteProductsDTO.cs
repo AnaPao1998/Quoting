@@ -9,6 +9,6 @@ namespace QuotingAPI.DTOModels
     {
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
-        public float Price { get; set; }
+        public double Price { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace Services
                 // Executing an ASYNC HTTP Method could be: Get, Post, Put, Delete
                 // In this case is a GET
                 // HttpContent content = new 
-                HttpResponseMessage response = await productMS.GetAsync($"{msPath}/pricing-books/PricingBook-1/product-prices");
+                HttpResponseMessage response = await productMS.GetAsync($"{msPath}/pricing-books/active");
                 // HttpResponseMessage response = await productMS.GetAsync($"{msPath}/campaigns/Campaigns-001");
                 //HttpResponseMessage response = await productMS.GetAsync($"{msPath}/products");
 
@@ -38,9 +38,9 @@ namespace Services
                     // Read ASYNC response from HTTPResponse 
                     String jsonResponse = await response.Content.ReadAsStringAsync();
                     // Deserialize response
-                    List<ProductBsDTO> products = JsonConvert.DeserializeObject<List<ProductBsDTO>>(jsonResponse);
+                    PricingBookBsDTO pricingBook = JsonConvert.DeserializeObject<PricingBookBsDTO>(jsonResponse);
 
-                    return products;
+                    return pricingBook.ProductPrices;
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace Services
                     throw new BackingServiceException("BS throws the error: " + statusCode);
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 throw new BackingServiceException("Connection with PricingBooks is not working! " + msPath);
             }

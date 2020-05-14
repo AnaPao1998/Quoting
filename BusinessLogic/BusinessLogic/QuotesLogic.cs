@@ -8,6 +8,7 @@ using QuotingAPI.Database.Models;
 using Services;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using BusinessLogic.Exceptions;
 
 namespace QuotingAPI.BusinessLogic
 {
@@ -22,7 +23,7 @@ namespace QuotingAPI.BusinessLogic
         }
         public List<QuoteDTO> GetQuoteList()
         {
-            _logger.LogInformation("Acquiring quote list");
+            Log.Logger.Information("Getting all quotes ");
 
             List<Quote> allQuotes = _quoteListDB.GetAll();
 
@@ -63,7 +64,6 @@ namespace QuotingAPI.BusinessLogic
 
         private void UpdateQuoteFunction(QuoteDTO updatedQuote, QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
-            _logger.LogInformation("Quote update (Function)");
             quoteToUpdate.IsSell = updatedQuote.IsSell;
             quoteToUpdate.QuoteName = updatedQuote.QuoteName;
             quoteToUpdate.QuoteLineItems = updatedQuote.QuoteLineItems;
@@ -96,7 +96,7 @@ namespace QuotingAPI.BusinessLogic
         }
         private void UpdateQuoteSaleState(QuoteDTO quoteToUpdate) //General UpdateQuote Method
         {
-            _logger.LogInformation("Quote update (Sale state)");
+            Log.Logger.Information("Updating quote " + quoteToUpdate.QuoteID);
             Quote upQuote = new Quote()
             {
                 QuoteID = quoteToUpdate.QuoteID,
@@ -124,8 +124,15 @@ namespace QuotingAPI.BusinessLogic
         }
         public void UpdateQuote(string id, QuoteDTO updatedQuote)//update by id
         {
-            _logger.LogInformation("Quote update");
+            if (string.IsNullOrEmpty(updatedQuote.ClientCode))
+            {
+                Log.Logger.Information("Empty or null field");
+                throw new QuoteLogicException("Empty or null field");
+            }
+
+            Log.Logger.Information("Updating quote " + updatedQuote.ClientCode);
             List<QuoteDTO> quoteList = GetQuoteList();
+
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
                 if (quoteToUpdate.QuoteID == id) //Search for quoteToUpdate by id
@@ -136,7 +143,7 @@ namespace QuotingAPI.BusinessLogic
         }
         public void DeleteByID(string quoteID)
         {
-            _logger.LogInformation("Deletion");
+            Log.Logger.Information("Deleting quote " + quoteID);
             List<QuoteDTO> quoteList = GetQuoteList();
 
             var obj = quoteList.FirstOrDefault(q => q.QuoteID == quoteID);//Search for First quoteToDelete by id
@@ -156,7 +163,7 @@ namespace QuotingAPI.BusinessLogic
 
         public void UpdateSale(string id, bool state) //change SaleState by id
         {
-            _logger.LogInformation("Sale update");
+            Log.Logger.Information("Updating Sale state " + id);
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
@@ -169,9 +176,9 @@ namespace QuotingAPI.BusinessLogic
             }
         }
 
-        private QuoteProductsDTO DiscountApplier(QuoteProductsDTO quote, float price)
+        private QuoteProductsDTO DiscountApplier(QuoteProductsDTO quote, double price)
         {
-            _logger.LogInformation("Discount applied");
+            
             float quantityDiscount = 0;
             float rankingDiscount = 1 * (float)0.01; //Hardcoded ranking
 
@@ -216,7 +223,14 @@ namespace QuotingAPI.BusinessLogic
 
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
-            _logger.LogInformation("New quote");
+            if (string.IsNullOrEmpty(newQuote.ClientCode))
+            {
+                Log.Logger.Information("Empty or null field");
+                throw new QuoteLogicException("Empty or null field");
+            }
+
+
+            Log.Logger.Information("Adding quote " + newQuote.QuoteID);
             //cntId += 1;
             // Mappers
             Quote quote = new Quote();

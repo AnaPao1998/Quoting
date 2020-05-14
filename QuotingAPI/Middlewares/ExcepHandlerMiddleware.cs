@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using BackingServices.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using QuotingAPI.Exceptions;
+//using QuotingAPI.Exceptions;
+using BusinessLogic.Exceptions;
 
 namespace QuotingAPI.Middlewares
 {
@@ -35,9 +37,19 @@ namespace QuotingAPI.Middlewares
         {
             int httpStatusCode;
             string messageToShow;
-            if (ex is ControllerExceptions)
+            if (ex is QuoteLogicException)
             {
-                httpStatusCode = 404;
+                httpStatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                messageToShow = ex.Message;
+            }
+            else if (ex is BackingServiceException)
+            {
+                httpStatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                messageToShow = ex.Message;
+            }
+            else if (ex is DatabaseException)
+            {
+                httpStatusCode = (int)HttpStatusCode.ServiceUnavailable;
                 messageToShow = ex.Message;
             }
             else

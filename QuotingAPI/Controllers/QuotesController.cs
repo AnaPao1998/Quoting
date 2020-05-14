@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using QuotingAPI.DTOModels;
 using QuotingAPI.BusinessLogic;
-using QuotingAPI.Exceptions;
+using Serilog;
 
 namespace QuotingAPI.Controllers
 {
@@ -27,14 +27,7 @@ namespace QuotingAPI.Controllers
             _quotesLogic = quoteslogic;
             _configuration = configuration;
         }
-        // GET: api/Quotes
-        [HttpGet]
-        [Route("quotes")]
-
-        public IEnumerable<QuoteDTO> GetAll()
-        {
-            return _quotesLogic.GetQuoteList();
-        }
+        
 
         // POST: api/Quotes
         [HttpPost]
@@ -42,6 +35,7 @@ namespace QuotingAPI.Controllers
 
         public QuoteDTO Post([FromBody] QuoteDTO newQuoteDTO)
         {
+            Log.Logger.Information("POST request");
             var dbServer = _configuration.GetSection("Database").GetSection("connectionString");
 
             List<QuoteProductsDTO> qp = new List<QuoteProductsDTO>();
@@ -62,67 +56,81 @@ namespace QuotingAPI.Controllers
             return (newQuote);
         }
 
+        // GET: api/Quotes
+        [HttpGet]
+        [Route("quotes")]
+
+        public IEnumerable<QuoteDTO> GetAll()
+        {
+            Log.Logger.Information("GET request");
+            return _quotesLogic.GetQuoteList();
+        }
+
         // PUT: api/Quotes
         [HttpPut("quotes/{quoteId}")] //update by id
         public bool Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
         {
-            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            if (exists != null)
-            {
-                _quotesLogic.UpdateQuote(quoteId, updatedQuote);
-                return true;
-            }
-            else
-            {
-                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            }
+            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            //if (exists != null)
+            //{
+            Log.Logger.Information("PUT request");
+            _quotesLogic.UpdateQuote(quoteId, updatedQuote);
+            return true;
+            //}
+            //else
+            //{
+                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
+            //}
             
-        }
-
-        [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
-        public bool PutSell(string quoteId)
-        {
-            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            if (exists != null)
-            {
-                _quotesLogic.UpdateSale(quoteId, true);
-                return true;
-            }
-            else
-            {
-                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            }
-        }
-
-        [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
-        public bool PutCancelSell(string quoteId)
-        {
-            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            if (exists != null)
-            {
-                _quotesLogic.UpdateSale(quoteId, false);
-                return true;
-            }
-            else
-            {
-                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            }
         }
 
         // DELETE: api/Quotes
         [HttpDelete("quotes/{quoteId}")] //delete by id
         public bool Delete(string quoteId)
         {
-            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            if (exists != null)
-            {
-                _quotesLogic.DeleteByID(quoteId);
+            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            //if (exists != null)
+            //{
+            Log.Logger.Information("DELETE request");
+            _quotesLogic.DeleteByID(quoteId);
+            return true;
+            //}
+            //else
+            //{
+            //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
+            //}
+        }
+
+        [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
+        public bool PutSell(string quoteId)
+        {
+            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            //if (exists != null)
+            //{
+            Log.Logger.Information("PUT SELL request");
+            _quotesLogic.UpdateSale(quoteId, true);
+            return true;
+            //}
+            //else
+            //{
+                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
+            //}
+        }
+
+        [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
+        public bool PutCancelSell(string quoteId)
+        {
+            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            //if (exists != null)
+            //{
+            Log.Logger.Information("PUT CANCELL SELL request");
+            _quotesLogic.UpdateSale(quoteId, false);
                 return true;
-            }
-            else
-            {
-                throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            }
+            //}
+            //else
+            //{
+                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
+            //}
         }
 
     }

@@ -14,6 +14,6 @@ namespace Services
 
         public bool Status { get; set; }
 
-        public List<ProductBsDTO> ProductsList { get; set; }
+        public List<ProductBsDTO> ProductPrices { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using QuotingAPI.DTOModels;
 using QuotingAPI.BusinessLogic;
 using Serilog;
+using BackingServices.Exceptions;
 
 namespace QuotingAPI.Controllers
 {
@@ -70,17 +71,17 @@ namespace QuotingAPI.Controllers
         [HttpPut("quotes/{quoteId}")] //update by id
         public bool Put(string quoteId, [FromBody] QuoteDTO updatedQuote)
         {
-            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            //if (exists != null)
-            //{
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
             Log.Logger.Information("PUT request");
             _quotesLogic.UpdateQuote(quoteId, updatedQuote);
             return true;
-            //}
-            //else
-            //{
-                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            //}
+            }
+            else
+            {
+                throw new DatabaseException("The ID couldn't be found ! { " + quoteId + " }");
+            }
             
         }
 
@@ -88,49 +89,49 @@ namespace QuotingAPI.Controllers
         [HttpDelete("quotes/{quoteId}")] //delete by id
         public bool Delete(string quoteId)
         {
-            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            //if (exists != null)
-            //{
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
             Log.Logger.Information("DELETE request");
             _quotesLogic.DeleteByID(quoteId);
             return true;
-            //}
-            //else
-            //{
-            //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            //}
+            }
+            else
+            {
+            throw new DatabaseException("The ID couldn't be found ! { " + quoteId + " }");
+            }
         }
 
         [HttpPut("quotes/{quoteId}/sell")] //do the sale by id
         public bool PutSell(string quoteId)
         {
-            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            //if (exists != null)
-            //{
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
             Log.Logger.Information("PUT SELL request");
             _quotesLogic.UpdateSale(quoteId, true);
             return true;
-            //}
-            //else
-            //{
-                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            //}
+            }
+            else
+            {
+                throw new DatabaseException("The ID couldn't be found ! { " + quoteId + " }");
+            }
         }
 
         [HttpPut("quotes/{quoteId}/cancel-sell")] //do the sale by id
         public bool PutCancelSell(string quoteId)
         {
-            //var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
-            //if (exists != null)
-            //{
+            var exists = _quotesLogic.GetQuoteList().FirstOrDefault(q => q.QuoteID == quoteId);
+            if (exists != null)
+            {
             Log.Logger.Information("PUT CANCELL SELL request");
             _quotesLogic.UpdateSale(quoteId, false);
                 return true;
-            //}
-            //else
-            //{
-                //throw new ControllerExceptions("The ID couldn't be found ! { " + quoteId + " }");
-            //}
+            }
+            else
+            {
+                throw new DatabaseException("The ID couldn't be found ! { " + quoteId + " }");
+            }
         }
 
     }

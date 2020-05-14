@@ -15,11 +15,8 @@ using Serilog.Events;
 
 using QuotingAPI.BusinessLogic;
 using QuotingAPI.Database;
-<<<<<<< HEAD
 using QuotingAPI.Middlewares;
-=======
 using Services;
->>>>>>> 67ac38fb38ddde3d68f41112a139141c5ccd9ca2
 
 namespace QuotingAPI
 {
@@ -52,7 +49,7 @@ namespace QuotingAPI
                 .WriteTo.RollingFile(logpath, LogEventLevel.Information)
                 .CreateLogger();
 
-            Log.Information("This app is using the config file: " + $"appsettings.{env.EnvironmentName}.json");
+            Log.Information("This app is using the config file: " + $"appsettings.{environment.EnvironmentName}.json");
 
 
         }

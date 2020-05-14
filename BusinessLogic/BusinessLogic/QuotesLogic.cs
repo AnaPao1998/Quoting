@@ -118,6 +118,10 @@ namespace QuotingAPI.BusinessLogic
         }
         public void UpdateQuote(string id, QuoteDTO updatedQuote)//update by id
         {
+            if (string.IsNullOrEmpty(updatedQuote.ClientCode))
+            {
+                throw new Exception("Can't be empty");
+            }
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
@@ -129,6 +133,10 @@ namespace QuotingAPI.BusinessLogic
         }
         public void DeleteByID(string quoteID)
         {
+            if (string.IsNullOrEmpty(quoteID))
+            {
+                throw new Exception("Can't be empty ");
+            }
 
             List<QuoteDTO> quoteList = GetQuoteList();
 
@@ -149,6 +157,10 @@ namespace QuotingAPI.BusinessLogic
 
         public void UpdateSale(string id, bool state) //change SaleState by id
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new Exception("Can't be empty ");
+            }
             List<QuoteDTO> quoteList = GetQuoteList();
             foreach (QuoteDTO quoteToUpdate in quoteList)
             {
@@ -207,6 +219,14 @@ namespace QuotingAPI.BusinessLogic
 
         public QuoteDTO AddNewQuote(QuoteDTO newQuote)
         {
+            if (newQuote.QuoteName.Length < 5)
+            {
+                throw new Exception("Quote name must have more than five words");
+            }
+            if (string.IsNullOrEmpty(newQuote.QuoteName))
+            {
+                throw new Exception("Quote name can't be empty");
+            }
             //cntId += 1;
             // Mappers
             Quote quote = new Quote();

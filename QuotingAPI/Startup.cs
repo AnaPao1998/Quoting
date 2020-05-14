@@ -10,9 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 using QuotingAPI.BusinessLogic;
 using QuotingAPI.Database;
+using QuotingAPI.Middlewares;
 using Services;
 
 namespace QuotingAPI
@@ -37,7 +40,18 @@ namespace QuotingAPI
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build(); //-> Singleton
-                
+            string logpath = Configuration.GetSection("Logging").GetSection("FileLocation").Value;
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel
+                .Information()
+                .WriteTo.Console()
+                .WriteTo.RollingFile(logpath, LogEventLevel.Information)
+                .CreateLogger();
+
+            Log.Information("This app is using the config file: " + $"appsettings.{environment.EnvironmentName}.json");
+
+
         }
 
         public IConfiguration Configuration { get; }
@@ -83,6 +97,8 @@ namespace QuotingAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExcepHandlerMiddleware();
 
             //app.UseHttpsRedirection();
 

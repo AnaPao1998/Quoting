@@ -20,11 +20,12 @@ namespace QuotingAPI.Database
         private DBContext _dbContext;
 
         private List<Quote> Quotes { get; set; }
-
-        public QuoteListDB(IConfiguration configuration, IPricingBookBackingService productBackingService)
+        public readonly ILogger<QuoteListDB> _logger;
+        public QuoteListDB(IConfiguration configuration, IPricingBookBackingService productBackingService, ILogger<QuoteListDB> logger)
         {
             _configuration = configuration;
             _productBackingService = productBackingService;
+            _logger = logger;
             InitDBContext();
         }
 

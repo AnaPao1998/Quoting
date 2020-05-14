@@ -75,6 +75,7 @@ namespace QuotingAPI.Database
             }
             else
             {
+                Log.Logger.Information("ID not found : " + updatedQuote.QuoteID);
                 throw new DatabaseException("ID not found : " + updatedQuote.QuoteID);
             }
             SaveChanges();
@@ -91,6 +92,7 @@ namespace QuotingAPI.Database
             }
             else
             {
+                Log.Logger.Information("ID not found : " + deletedQuote.QuoteID);
                 throw new DatabaseException("ID not found : " + deletedQuote.QuoteID);
             }
             bool wasRemoved = Quotes.Remove(deletedQuote);
@@ -119,6 +121,7 @@ namespace QuotingAPI.Database
             }
             catch 
             {
+                Log.Logger.Information("Conection with Pricing Books is not working");
                 throw new DatabaseException("Conection with Pricing Books is not working");
             }
         }

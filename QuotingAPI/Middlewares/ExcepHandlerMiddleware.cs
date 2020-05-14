@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using QuotingAPI.Exceptions;
+using BusinessLogic.Exceptions;
 
 namespace QuotingAPI.Middlewares
 {
@@ -36,7 +37,7 @@ namespace QuotingAPI.Middlewares
         {
             int httpStatusCode;
             string messageToShow;
-            if (ex is ControllerExceptions)
+            if (ex is QuoteLogicException)
             {
                 httpStatusCode = (int)HttpStatusCode.ServiceUnavailable;
                 messageToShow = ex.Message;

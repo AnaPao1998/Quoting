@@ -49,7 +49,7 @@ namespace Services
                     throw new BackingServiceException("BS throws the error: " + statusCode);
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 throw new BackingServiceException("Connection with PricingBooks is not working! " + msPath);
             }

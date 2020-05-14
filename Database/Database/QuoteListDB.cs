@@ -39,7 +39,7 @@ namespace QuotingAPI.Database
                 Quotes = _dbContext.Quote;
                 Log.Logger.Information("Succesful connection to Database at: " + _dbPath);
             }
-            catch(Exception e)
+            catch
             {
                 Log.Logger.Information("Error: Missing JSON file");
                 throw new DatabaseException("Missing JSON file at: " + _dbPath);
@@ -73,9 +73,12 @@ namespace QuotingAPI.Database
                 obj.QuoteLineItems = updatedQuote.QuoteLineItems;
                 obj.IsSell = updatedQuote.IsSell;
             }
+            else
+            {
+                throw new DatabaseException("ID not found : " + updatedQuote.QuoteID);
+            }
             SaveChanges();
             return obj;
-
 
         }
 
@@ -85,6 +88,10 @@ namespace QuotingAPI.Database
             if (obj != null)
             {
                 Quotes.Remove(obj);
+            }
+            else
+            {
+                throw new DatabaseException("ID not found : " + deletedQuote.QuoteID);
             }
             bool wasRemoved = Quotes.Remove(deletedQuote);
             SaveChanges();
@@ -110,7 +117,7 @@ namespace QuotingAPI.Database
                 }
                
             }
-            catch (Exception ex)
+            catch 
             {
                 throw new DatabaseException("Conection with Pricing Books is not working");
             }
